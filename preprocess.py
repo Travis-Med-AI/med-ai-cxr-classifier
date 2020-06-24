@@ -20,24 +20,23 @@ def read_dicom(dicom_path):
             pixel_data.append(dcm.pixel_array)
     return np.array(pixel_data)
 
-def preprocess(dicom_path: str):
-    image = read_dicom(f'{dicom_path}/DICOMDIR').astype(float)[0]
+def preprocess(dicom_paths):
+    processed = []
 
-    # Rescaling grey scale between 0-255
-    image_2d_scaled = (np.maximum(image,0) / image.max()) * 255.0
+    for dicom_path in dicom_paths:
+        image = read_dicom(f'{dicom_path}/DICOMDIR').astype(float)[0]
 
-    # Convert to uint
-    image_2d_scaled = np.uint8(image_2d_scaled)
+        # Rescaling grey scale between 0-255
+        image_2d_scaled = (np.maximum(image,0) / image.max()) * 255.0
 
-    print(f'image starts in shape {image_2d_scaled.shape}')
+        # Convert to uint
+        image_2d_scaled = np.uint8(image_2d_scaled)
 
+        image_2d_scaled = resize(image_2d_scaled, (224, 224))
 
-    image_2d_scaled = resize(image_2d_scaled, (224, 224))
+        image_2d_scaled = gray2rgb(image_2d_scaled)
 
-    image_2d_scaled = gray2rgb(image_2d_scaled)
+        processed.append(image_2d_scaled)
 
-    print(f'image is shape {image_2d_scaled.shape}')
-
-    image_2d_scaled = np.expand_dims(image_2d_scaled, axis=0)
-
-    return image_2d_scaled
+    processed = np.stack(processed, axis=0)
+    return processed

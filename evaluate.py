@@ -34,7 +34,8 @@ def evaluate(img):
     CATEGORIES = ["Abd_Xray", "Frontal_CXR", "Lateral_CXR", "MSK_Xray"]
     model = get_model()
 
-    score = model.predict(img)
+    scores = model.predict(img)
 
-    print(score)
-    return CATEGORIES[np.argmax(score)]
+    output = [CATEGORIES[np.argmax(score)] for score in scores]
+
+    return np.stack(output, axis=0), []
