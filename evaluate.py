@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+from medaimodels import ModelOutput
 from tensorflow.keras.models import load_model
 import numpy as np
 from tensorflow.python.keras.utils.generic_utils import CustomObjectScope
@@ -36,6 +37,6 @@ def evaluate(img):
 
     scores = model.predict(img)
 
-    output = [CATEGORIES[np.argmax(score)] for score in scores]
+    output = [ModelOutput(display=CATEGORIES[np.argmax(score)]) for score in scores]
 
-    return np.stack(output, axis=0), []
+    return output

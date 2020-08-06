@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t cxr-classifier .
+docker build -t tclarke104/cxr-classifier:0.1 .
