@@ -6,6 +6,7 @@ def evaluate_model(files):
     preprocessed = preprocess(files)
 
     study_type = evaluate(preprocessed)
+    print(study_type)
 
     return study_type
 
